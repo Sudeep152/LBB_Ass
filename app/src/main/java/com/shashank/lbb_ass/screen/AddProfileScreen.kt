@@ -10,6 +10,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import com.shashank.lbb_ass.Entity.User
 import com.shashank.lbb_ass.R
 import com.shashank.lbb_ass.viewmodel.UserViewModel
@@ -21,7 +22,7 @@ class AddProfileScreen : Fragment(R.layout.add_profile_screen) {
     companion object {
         val IMAGE_REQUEST_CODE = 1_000;
     }
-
+    var map:Bitmap ?= null
     var imageUri: Uri? = null
     lateinit var viewM: UserViewModel
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -30,23 +31,29 @@ class AddProfileScreen : Fragment(R.layout.add_profile_screen) {
 
         imgSet.setOnClickListener {
             openGallery()
+            map=null
+
         }
 
         Save_button.setOnClickListener {
+            map = useImage(imageUri);
             val firstname = nameEdt.text.toString()
             val lastName = lastEdt.text.toString()
-            val map = useImage(imageUri);
 
-            if (firstname.isEmpty() || lastName.isEmpty() || map.toString().isEmpty()){
-                Toast.makeText(context, "Please enter all field ", Toast.LENGTH_SHORT).show()
-            }else{
-                viewM.insertUser(User(firstname, lastName, map))
-            }
+
+
+
+                viewM.insertUser(User(firstname, lastName,map!!
+                    ))
+            Toast.makeText(context, "Done", Toast.LENGTH_SHORT).show()
+
+
 
         }
     }
 
     fun useImage(uri: Uri?): Bitmap {
+
         val bitmap = MediaStore.Images.Media.getBitmap(this.context?.contentResolver, uri)
         return bitmap
     }
